@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Simple Past – Was, Were and Regular Verbs</title>
+<style>
+:root{
+  --blue:#2467d7;--blue-dark:#164b9f;--blue-soft:#eaf3ff;
+  --yellow:#ffd84d;--orange:#ff9f43;--orange-soft:#fff2df;
+  --green:#bfe8b6;--green-dark:#2e9b55;--green-soft:#ebfaef;
+  --ink:#18324a;--muted:#61768a;--white:#fff;--bg:#f5fbff;
+  --danger:#d84e4e;--shadow:0 12px 30px rgba(34,84,132,.16);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,Arial,Helvetica,sans-serif;color:var(--ink)}
+body{background:linear-gradient(135deg,#eef7ff,#fff9de 52%,#efffe9);overflow-x:hidden}
+button,input,textarea{font:inherit}
+button{cursor:pointer;border:none;transition:transform .18s,box-shadow .18s,opacity .18s}
+button:hover{transform:translateY(-2px)}
+button:active{transform:translateY(0)}
+button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+.screen{display:none;min-height:100vh;padding:clamp(14px,2vw,28px)}
+.screen.active{display:flex;flex-direction:column}
+.topbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:15px}
+.brand{font-size:clamp(17px,2vw,25px);font-weight:1000;color:var(--blue);margin-right:auto}
+.icon-btn,.small-btn,.nav-btn,.primary-btn,.answer-btn,.menu-card{
+  border-radius:16px;box-shadow:0 7px 16px rgba(31,84,137,.13)
+}
+.icon-btn{background:#fff;color:var(--ink);font-weight:900;padding:10px 13px}
+.small-btn{background:#fff;color:var(--ink);font-weight:900;padding:11px 15px}
+.small-btn.blue{background:var(--blue);color:#fff}
+.small-btn.green{background:var(--green-dark);color:#fff}
+.small-btn.orange{background:var(--orange);color:#fff}
+.small-btn.yellow{background:var(--yellow);color:var(--ink)}
+.primary-btn{padding:15px 28px;background:var(--blue);color:#fff;font-size:19px;font-weight:1000;letter-spacing:.5px}
+.nav-btn{padding:12px 18px;background:#fff;color:var(--ink);font-weight:950}
+.nav-btn.next{background:var(--blue);color:#fff}
+.nav-btn.skip{background:var(--orange-soft);color:#9b5700;border:2px solid #ffc777}
+.card{background:rgba(255,255,255,.96);border-radius:28px;box-shadow:var(--shadow)}
+
+/* loading */
+#loading{align-items:center;justify-content:center;background:linear-gradient(135deg,var(--blue),#5ba9ff)}
+.loader-card{width:min(560px,94vw);padding:34px;text-align:center;background:#fff;border-radius:30px;box-shadow:var(--shadow)}
+.loading-icons{display:flex;justify-content:center;gap:22px;font-size:52px;margin-bottom:20px}
+.clock-anim{animation:rock 1.2s ease-in-out infinite}
+.book-anim{animation:float 1.8s ease-in-out infinite}
+@keyframes rock{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+@keyframes float{50%{transform:translateY(-8px)}}
+@keyframes starPop{0%{transform:scale(.1) rotate(-80deg);opacity:0}70%{transform:scale(1.3) rotate(12deg)}100%{transform:scale(1);opacity:1}}
+@keyframes slideIn{from{transform:translateY(10px);opacity:.3}to{transform:translateY(0);opacity:1}}
+.loading-track{height:18px;background:#e5eef8;border-radius:999px;overflow:hidden;margin-top:20px}
+.loading-bar{height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--yellow),var(--green-dark));animation:load 1.5s ease forwards}
+@keyframes load{to{width:100%}}
+
+/* hero / opening */
+.hero{width:min(1180px,100%);margin:auto;display:grid;grid-template-columns:1.1fr .9fr;gap:25px;align-items:center}
+.hero-copy{padding:clamp(25px,4vw,52px)}
+.kicker{display:inline-flex;gap:8px;background:var(--yellow);padding:8px 14px;border-radius:999px;font-weight:950}
+h1{font-size:clamp(40px,6vw,78px);line-height:.98;color:var(--blue);margin:18px 0 5px;letter-spacing:-1.5px}
+.subtitle{font-size:clamp(21px,3vw,38px);font-weight:1000;color:var(--orange);margin-bottom:16px}
+.instruction{font-size:clamp(16px,1.7vw,21px);color:var(--muted);line-height:1.5}
+.student-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin:22px 0 14px}
+.field label{display:block;font-weight:900;margin:0 0 6px 4px}
+.textbox{width:100%;border:3px solid #d8e7f7;border-radius:15px;padding:13px 15px;outline:none;background:#fff;color:var(--ink)}
+.textbox:focus{border-color:var(--blue)}
+.hero-art{min-height:480px;position:relative;overflow:hidden;padding:26px;background:linear-gradient(160deg,#dff1ff,#fff1ae);display:grid;grid-template-columns:1fr 1fr;gap:15px;align-content:center}
+.activity-tile{background:rgba(255,255,255,.87);border-radius:22px;padding:20px;text-align:center;box-shadow:0 9px 18px rgba(34,84,132,.12);animation:float 3s ease-in-out infinite}
+.activity-tile:nth-child(2){animation-delay:.5s}.activity-tile:nth-child(3){animation-delay:1s}.activity-tile:nth-child(4){animation-delay:1.5s}
+.activity-icon{font-size:58px}.activity-label{font-weight:950;color:var(--blue-dark);margin-top:8px}
+.past-ribbon{position:absolute;top:18px;right:-44px;background:var(--orange);color:#fff;padding:9px 55px;transform:rotate(32deg);font-weight:1000}
+
+/* menu dashboard */
+.menu-wrap{width:min(1250px,100%);margin:auto}
+.dashboard{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:15px}
+.stat{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:15px 17px;font-weight:900}
+.stat span{display:block;color:var(--blue);font-size:clamp(23px,3vw,35px);margin-top:4px}
+.progress-track{height:18px;background:#dfeaf5;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--yellow),var(--green-dark));transition:width .35s}
+.menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.menu-card{background:#fff;padding:18px 20px;min-height:112px;display:flex;align-items:center;gap:15px;text-align:left;border:3px solid transparent}
+.menu-card:hover{border-color:#b9d8ff}
+.menu-card.complete{border-color:#8dd5a1;background:#f4fff6}
+.menu-card.flagged{border-color:#ffc575;background:#fffaf1}
+.menu-num{width:53px;height:53px;border-radius:16px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-size:25px;font-weight:1000;flex:0 0 auto}
+.menu-icon{font-size:30px}
+.menu-title{font-size:clamp(18px,1.8vw,23px);font-weight:1000}
+.menu-meta{font-size:14px;color:var(--muted);margin-top:5px}
+.menu-status{margin-left:auto;font-size:28px}
+.footer-note{text-align:center;color:var(--muted);margin-top:14px;font-size:13px}
+
+/* exercise interface */
+.exercise-shell{width:min(1120px,100%);margin:0 auto;display:flex;flex-direction:column;flex:1}
+.exercise-head{background:#fff;border-radius:22px;padding:15px 19px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.exercise-head h2{margin:0;color:var(--blue);font-size:clamp(22px,3vw,34px);flex:1}
+.question-card{background:#fff;border-radius:27px;box-shadow:var(--shadow);padding:clamp(20px,3.3vw,38px);min-height:430px;flex:1;animation:slideIn .28s ease}
+.q-badge{display:inline-flex;align-items:center;gap:8px;background:var(--yellow);border-radius:999px;padding:7px 13px;font-weight:1000}
+.q-text{font-size:clamp(22px,2.7vw,34px);line-height:1.45;font-weight:900;margin:17px 0 20px}
+.verb-note{display:block;color:var(--orange);font-size:clamp(17px,1.9vw,23px);margin-top:8px}
+.answer-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.answer-btn{background:#f7fbff;border:3px solid #d7e7f8;padding:17px;font-size:clamp(17px,1.8vw,22px);font-weight:900;text-align:left;min-height:68px}
+.answer-btn.selected{border-color:var(--blue);background:var(--blue-soft)}
+.answer-btn.correct{border-color:var(--green-dark);background:var(--green-soft)}
+.answer-btn.wrong{border-color:var(--orange);background:var(--orange-soft)}
+.large-input,.large-textarea,.correction-input{
+  width:100%;border:3px solid #d8e7f7;border-radius:16px;padding:14px 16px;outline:none;font-size:clamp(18px,2vw,25px);color:var(--ink)
+}
+.large-input:focus,.large-textarea:focus,.correction-input:focus{border-color:var(--blue)}
+.large-input.retry,.large-textarea.retry,.correction-input.retry{border-color:var(--orange);background:#fffaf2}
+.large-textarea{min-height:120px;resize:vertical}
+.prefix{font-size:clamp(22px,2.5vw,31px);font-weight:1000;margin-bottom:10px}
+.feedback{display:none;border-radius:16px;padding:13px 16px;font-weight:900;line-height:1.45;margin-top:16px;position:relative}
+.feedback.show{display:block}
+.feedback.good{background:var(--green-soft);color:#24723d;border:2px solid #9dd8ac}
+.feedback.try{background:var(--orange-soft);color:#945500;border:2px solid #ffd095}
+.feedback.info{background:var(--blue-soft);color:#285a91;border:2px solid #bdd8f7}
+.star-burst{position:absolute;right:20px;top:7px;font-size:34px;animation:starPop .55s ease}
+.hint-box,.compare-box{display:none;margin-top:12px;padding:12px 15px;border-radius:14px;font-weight:850}
+.hint-box.show,.compare-box.show{display:block}
+.hint-box{background:#fff8cf;border:2px solid #f0ce39}
+.compare-box{background:var(--blue-soft);border:2px solid #b9d7f7}
+.action-row,.nav-row,.nav-group{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.action-row{margin-top:15px}
+.nav-row{justify-content:space-between;margin-top:14px}
+.phrase-line{display:flex;flex-wrap:wrap;gap:7px;align-items:center;font-size:clamp(22px,2.6vw,33px);line-height:1.7;margin:18px 0}
+.phrase{border:2px solid transparent;background:#f4f8fc;border-radius:10px;padding:4px 7px;cursor:pointer}
+.phrase:hover,.phrase.selected{border-color:var(--blue);background:var(--blue-soft)}
+.phrase.mistake{border-color:var(--orange);background:var(--orange-soft)}
+.phrase.fixed{border-color:var(--green-dark);background:var(--green-soft)}
+.complete-sentence{font-size:clamp(20px,2.2vw,28px);line-height:1.5;margin-top:16px;padding:14px;border-radius:15px;background:#f6fafc}
+.green-word{color:var(--green-dark);font-weight:1000}
+.blue-word{color:var(--blue);font-weight:1000}
+.summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:20px 0}
+.summary-item{background:#f5f9fd;border-radius:15px;padding:14px;font-weight:900}
+.review-item{padding:14px;border-radius:15px;margin:10px 0;background:#fff8e9;border:2px solid #ffd89d}
+.flag-chip{display:inline-flex;align-items:center;gap:5px;background:var(--orange-soft);color:#965700;border-radius:999px;padding:6px 10px;font-weight:900}
+
+/* results & modal */
+.result-card{width:min(940px,100%);margin:auto;background:#fff;border-radius:32px;padding:clamp(26px,5vw,55px);box-shadow:var(--shadow);text-align:center}
+.result-card h2{margin:0;color:var(--blue);font-size:clamp(48px,7vw,90px)}
+.trophy{font-size:85px;animation:float 2.4s ease-in-out infinite}
+.rating{font-size:clamp(25px,4vw,47px);color:var(--orange);font-weight:1000;margin:10px 0}
+.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;text-align:left;margin:22px 0}
+.result-item{background:#f5f9fd;border-radius:16px;padding:15px;font-weight:900}
+.result-item strong{float:right;color:var(--blue)}
+.modal{position:fixed;inset:0;background:rgba(14,38,62,.68);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+.modal.show{display:flex}
+.modal-card{width:min(1020px,97vw);max-height:90vh;overflow:auto;background:#fff;border-radius:27px;padding:24px;box-shadow:var(--shadow)}
+.modal-card h3{margin:0;color:var(--blue);font-size:28px}
+.teacher-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.teacher-stat{background:#f3f8fd;border-radius:13px;padding:12px;font-weight:850}
+.teacher-stat strong{display:block;color:var(--blue);font-size:23px;margin-top:3px}
+.table-scroll{overflow:auto}
+.teacher-table{width:100%;border-collapse:collapse;min-width:840px}
+.teacher-table th{background:var(--blue);color:#fff;padding:10px}
+.teacher-table td{border-bottom:1px solid #e1ebf4;padding:9px;vertical-align:top}
+.hidden{display:none!important}
+
+@media(max-width:850px){
+  .hero{grid-template-columns:1fr}.hero-art{min-height:330px}.student-grid{grid-template-columns:1fr}
+  .dashboard{grid-template-columns:1fr 1fr}.menu-grid{grid-template-columns:1fr}
+  .answer-grid{grid-template-columns:1fr}.teacher-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:550px){
+  .dashboard,.summary-grid,.result-grid,.teacher-grid{grid-template-columns:1fr}
+}
+@media print{
+  body{background:#fff}.no-print,.topbar,.nav-row,.modal{display:none!important}
+  .screen{display:none!important;padding:0}.screen.active{display:block!important}
+  .result-card,.question-card,.modal-card{box-shadow:none;border:1px solid #ccd8e2}
+  #teacherModal.show{display:block!important;position:static;background:#fff;padding:0}
+  #teacherModal.show .modal-card{display:block;width:100%;max-height:none;overflow:visible;border:none}
+}
+</style>
+</head>
+<body>
+
+<section id="loading" class="screen active">
+  <div class="loader-card">
+    <div class="loading-icons"><span class="clock-anim">🗓️</span><span class="book-anim">📘</span><span class="clock-anim">🕒</span></div>
+    <h2>Preparing your grammar challenge…</h2>
+    <p>Loading questions, stars, sounds, and past-time adventures.</p>
+    <div class="loading-track"><div class="loading-bar"></div></div>
+  </div>
+</section>
+
+<section id="opening" class="screen">
+  <div class="hero">
+    <div class="hero-copy card">
+      <div class="kicker">⭐ Grammar Challenge</div>
+      <h1>THE SIMPLE PAST</h1>
+      <div class="subtitle">Was, Were and Regular Verbs</div>
+      <p class="instruction">Complete all seven exercises and collect as many stars as possible!</p>
+      <div class="student-grid">
+        <div class="field"><label>Name</label><input id="studentName" class="textbox" placeholder="Your name"></div>
+        <div class="field"><label>Class</label><input id="studentClass" class="textbox" placeholder="Class"></div>
+        <div class="field"><label>Date</label><input id="studentDate" type="date" class="textbox"></div>
+      </div>
+      <button class="primary-btn" onclick="startGame()">START</button>
+      <div id="openingFeedback" class="feedback"></div>
+    </div>
+    <div class="hero-art card" aria-label="Students doing activities yesterday">
+      <div class="past-ribbon">YESTERDAY</div>
+      <div class="activity-tile"><div class="activity-icon">🏐</div><div class="activity-label">played volleyball</div></div>
+      <div class="activity-tile"><div class="activity-icon">📺</div><div class="activity-label">watched television</div></div>
+      <div class="activity-tile"><div class="activity-icon">👵</div><div class="activity-label">visited grandparents</div></div>
+      <div class="activity-tile"><div class="activity-icon">🧹</div><div class="activity-label">cleaned a room</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="menu" class="screen">
+  <div class="menu-wrap">
+    <div class="topbar">
+      <div class="brand">The Simple Past</div>
+      <button class="icon-btn" onclick="showScreen('opening')">🏠 HOME</button>
+      <button class="icon-btn" onclick="toggleMute()" id="muteBtn">🔊 SOUND</button>
+      <button class="icon-btn" onclick="openTeacherLogin()">🧑‍🏫 TEACHER MODE</button>
+      <button class="icon-btn" onclick="resetGame()">↻ RESET</button>
+    </div>
+    <div class="dashboard">
+      <div class="stat">Current score <span id="menuScore">0 / 50</span></div>
+      <div class="stat">Completed exercises <span id="menuCompleted">0 / 7</span></div>
+      <div class="stat">Collected stars <span id="menuStars">0 ⭐</span></div>
+      <div class="stat">Overall progress
+        <div class="progress-track" style="margin-top:10px"><div id="menuProgress" class="progress-fill"></div></div>
+      </div>
+    </div>
+    <div id="menuGrid" class="menu-grid"></div>
+    <div style="display:flex;justify-content:center;margin-top:18px">
+      <button id="resultsButton" class="primary-btn" onclick="showResults()" disabled>VIEW FINAL RESULTS</button>
+    </div>
+    <div class="footer-note">Progress is saved automatically on this device.</div>
+  </div>
+</section>
+
+<section id="exercise" class="screen">
+  <div class="exercise-shell">
+    <div class="topbar">
+      <div class="brand">⭐ <span id="studentLabel"></span></div>
+      <button class="icon-btn" onclick="goMenu()">🏠 HOME</button>
+      <button class="icon-btn" onclick="toggleMute()" id="muteBtn2">🔊 SOUND</button>
+      <button class="icon-btn" onclick="openTeacherLogin()">🧑‍🏫 TEACHER MODE</button>
+    </div>
+    <div class="exercise-head">
+      <h2 id="exerciseTitle"></h2>
+      <div style="min-width:230px;flex:0 1 340px">
+        <div id="exerciseCounter" style="font-weight:900;margin-bottom:5px"></div>
+        <div class="progress-track"><div id="exerciseProgress" class="progress-fill"></div></div>
+      </div>
+      <div style="font-weight:1000">Score: <span id="exerciseScore">0</span> &nbsp; ⭐ <span id="exerciseStars">0</span></div>
+    </div>
+    <div id="questionArea" class="question-card"></div>
+    <div class="nav-row no-print">
+      <div class="nav-group">
+        <button class="nav-btn" onclick="previousQuestion()">← BACK</button>
+        <button class="nav-btn skip" onclick="skipCurrent()">🚩 SKIP</button>
+      </div>
+      <div class="nav-group">
+        <button class="nav-btn" onclick="goMenu()">HOME</button>
+        <button class="nav-btn next" onclick="nextQuestion()">NEXT →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="exerciseSummary" class="screen">
+  <div class="result-card">
+    <div class="trophy">⭐</div>
+    <h2 style="font-size:clamp(35px,6vw,68px)">EXERCISE COMPLETE!</h2>
+    <div id="summaryTitle" class="rating"></div>
+    <div id="summaryStats" class="summary-grid"></div>
+    <div class="nav-group no-print" style="justify-content:center">
+      <button class="small-btn orange" onclick="reviewCurrentExercise()">REVIEW</button>
+      <button class="small-btn blue" onclick="goMenu()">RETURN TO MENU</button>
+    </div>
+  </div>
+</section>
+
+<section id="review" class="screen">
+  <div class="exercise-shell">
+    <div class="topbar">
+      <div id="reviewTitle" class="brand">Review</div>
+      <button class="icon-btn" onclick="goMenu()">🏠 HOME</button>
+      <button class="icon-btn" onclick="showResults()">🏆 RESULTS</button>
+    </div>
+    <div id="reviewArea" class="question-card"></div>
+  </div>
+</section>
+
+<section id="results" class="screen">
+  <div class="result-card">
+    <div class="trophy">🏆</div>
+    <h2>WELL DONE!</h2>
+    <div id="resultRating" class="rating"></div>
+    <p style="font-size:21px;font-weight:900">You did a great job talking about the past!</p>
+    <p style="font-size:18px;color:var(--muted)">Keep practising and you will get better and better!</p>
+    <div class="result-grid">
+      <div class="result-item">Student <strong id="resultName"></strong></div>
+      <div class="result-item">Class <strong id="resultClass"></strong></div>
+      <div class="result-item">Date <strong id="resultDate"></strong></div>
+      <div class="result-item">Total score <strong id="resultScore"></strong></div>
+      <div class="result-item">Percentage <strong id="resultPercent"></strong></div>
+      <div class="result-item">Correct answers <strong id="resultCorrect"></strong></div>
+      <div class="result-item">Collected stars <strong id="resultStars"></strong></div>
+      <div class="result-item">Completed exercises <strong id="resultCompleted"></strong></div>
+      <div class="result-item">Skipped questions <strong id="resultSkipped"></strong></div>
+      <div class="result-item">Achievement <strong id="resultAchievement"></strong></div>
+    </div>
+    <div class="nav-group no-print" style="justify-content:center">
+      <button class="small-btn orange" onclick="showMistakeReview()">REVIEW MISTAKES</button>
+      <button class="small-btn yellow" onclick="completeSkipped()">COMPLETE SKIPPED QUESTIONS</button>
+      <button class="small-btn green" onclick="resetGame()">PLAY AGAIN</button>
+      <button class="small-btn blue" onclick="window.print()">PRINT RESULTS</button>
+      <button class="small-btn" onclick="goMenu()">RETURN HOME</button>
+    </div>
+  </div>
+</section>
+
+<div id="teacherLoginModal" class="modal">
+  <div class="modal-card" style="width:min(460px,95vw)">
+    <div style="display:flex;align-items:center;gap:10px">
+      <h3 style="flex:1">Teacher Mode</h3>
+      <button class="small-btn" onclick="closeModal('teacherLoginModal')">CLOSE</button>
+    </div>
+    <p>Enter the four-digit teacher code (default: <strong>1234</strong>).</p>
+    <input id="teacherCode" type="password" inputmode="numeric" maxlength="4" class="large-input" placeholder="Code">
+    <div class="action-row"><button class="small-btn blue" onclick="verifyTeacherCode()">OPEN</button></div>
+    <div id="teacherLoginFeedback" class="feedback"></div>
+  </div>
+</div>
+
+<div id="teacherModal" class="modal">
+  <div class="modal-card">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <h3 style="flex:1">Teacher Mode – Student Report</h3>
+      <button class="small-btn" onclick="closeModal('teacherModal')">CLOSE</button>
+    </div>
+    <div id="teacherSummary" class="teacher-grid"></div>
+    <div class="action-row">
+      <button class="small-btn blue" onclick="teacherShowAllAnswers()">SHOW ALL ANSWERS</button>
+      <button class="small-btn orange" onclick="teacherReviewAnswers()">REVIEW STUDENT ANSWERS</button>
+      <button class="small-btn yellow" onclick="window.print()">PRINT RESULTS</button>
+      <button class="small-btn green" onclick="teacherReset()">RESET STUDENT DATA</button>
+    </div>
+    <div id="teacherContent" style="margin-top:18px"></div>
+  </div>
+</div>
+
+<script>
+const EXERCISE_TITLES=["Was or Were?","Regular Verbs","Multiple Choice","Negative Sentences","Write Questions","Short Answers","Find and Correct"];
+const EXERCISE_ICONS=["⚖️","✏️","🎯","🚫","❓","💬","🔍"];
+const EXERCISE_COUNTS={1:8,2:10,3:8,4:8,5:8,6:4,7:4};
+const GLOBAL_START={1:1,2:9,3:19,4:27,5:35,6:43,7:47};
+
+const ex1=[
+{n:1,q:"I __________ at the library yesterday afternoon.",a:"was",subject:"I"},
+{n:2,q:"My parents __________ very tired after the long journey.",a:"were",subject:"My parents"},
+{n:3,q:"The weather __________ sunny and warm last weekend.",a:"was",subject:"The weather"},
+{n:4,q:"Lucy and Emma __________ in the school playground.",a:"were",subject:"Lucy and Emma"},
+{n:5,q:"My birthday party __________ really exciting.",a:"was",subject:"My birthday party"},
+{n:6,q:"You __________ late for class yesterday morning.",a:"were",subject:"You"},
+{n:7,q:"The shops __________ very crowded on Saturday.",a:"were",subject:"The shops"},
+{n:8,q:"Our teacher __________ happy with our project.",a:"was",subject:"Our teacher"}
+];
+
+const ex2=[
+{n:9,q:"We ____________________ volleyball in the park yesterday.",verb:"play",a:["played"],hint:"play → played"},
+{n:10,q:"My sister ____________________ her bedroom last Saturday.",verb:"tidy",a:["tidied"],hint:"tidy → tidied"},
+{n:11,q:"The children ____________________ a funny cartoon after dinner.",verb:"watch",a:["watched"],hint:"watch → watched"},
+{n:12,q:"Dad ____________________ the car in front of the house.",verb:"wash",a:["washed"],hint:"wash → washed"},
+{n:13,q:"I ____________________ my grandparents last weekend.",verb:"visit",a:["visited"],hint:"visit → visited"},
+{n:14,q:"Tom ____________________ his homework before dinner.",verb:"finish",a:["finished"],hint:"finish → finished"},
+{n:15,q:"They ____________________ their picnic because it started to rain.",verb:"cancel",a:["cancelled","canceled"],hint:"cancel → cancelled / canceled"},
+{n:16,q:"Mia ____________________ her heavy bag to school.",verb:"carry",a:["carried"],hint:"carry → carried"},
+{n:17,q:"We ____________________ at the bus stop for twenty minutes.",verb:"wait",a:["waited"],hint:"wait → waited"},
+{n:18,q:"The baby ____________________ because he was hungry.",verb:"cry",a:["cried"],hint:"cry → cried"}
+];
+
+const ex3=[
+{n:19,q:"My friends __________ at the swimming pool yesterday.",choices:["was","were","are"],a:"were",hint:"Use were with plural subjects.",explain:"My friends is a plural subject, so use were."},
+{n:20,q:"Sarah __________ her aunt on Sunday.",choices:["visits","visited","visiting"],a:"visited",hint:"Use the past form of a regular verb for affirmative sentences.",explain:"The sentence describes Sunday in the past, so visit becomes visited."},
+{n:21,q:"The film __________ very interesting.",choices:["was","were","did"],a:"was",hint:"Use was with singular subjects.",explain:"The film is singular, so use was."},
+{n:22,q:"We __________ football because the field was wet.",choices:["didn’t played","don’t play","didn’t play"],a:"didn’t play",hint:"After didn’t, do not use the past form.",explain:"After didn’t, use the base form of the verb: didn’t play."},
+{n:23,q:"Jack __________ his computer after school.",choices:["used","use","uses"],a:"used",hint:"Use the past form of a regular verb for affirmative sentences.",explain:"The past simple affirmative form of use is used."},
+{n:24,q:"The students __________ excited about the school trip.",choices:["was","were","is"],a:"were",hint:"Use were with plural subjects.",explain:"The students is plural, so use were."},
+{n:25,q:"Mum __________ the windows yesterday morning.",choices:["cleaned","cleaning","clean"],a:"cleaned",hint:"Use the past form of a regular verb for affirmative sentences.",explain:"Yesterday morning signals the past, so clean becomes cleaned."},
+{n:26,q:"I __________ at home last night.",choices:["wasn’t","weren’t","didn’t"],a:"wasn’t",hint:"Use wasn’t to make the negative form of was.",explain:"Use was with I; the negative form is wasn’t or was not."}
+];
+
+const ex4=[
+{n:27,original:"Ben was at the sports centre yesterday.",prefix:"Ben",answers:["wasn't at the sports centre yesterday","was not at the sports centre yesterday"],complete:"Ben wasn’t at the sports centre yesterday.",hint:"Change was to wasn’t or was not."},
+{n:28,original:"The children were noisy during the lesson.",prefix:"The children",answers:["weren't noisy during the lesson","were not noisy during the lesson"],complete:"The children weren’t noisy during the lesson.",hint:"Change were to weren’t or were not."},
+{n:29,original:"We played basketball after school.",prefix:"We",answers:["didn't play basketball after school","did not play basketball after school"],complete:"We didn’t play basketball after school.",hint:"Use didn’t + base verb with action verbs."},
+{n:30,original:"Lucy visited the science museum on Saturday.",prefix:"Lucy",answers:["didn't visit the science museum on Saturday","did not visit the science museum on Saturday"],complete:"Lucy didn’t visit the science museum on Saturday.",hint:"Do not keep the -ed ending after didn’t."},
+{n:31,original:"My parents watched the football match.",prefix:"My parents",answers:["didn't watch the football match","did not watch the football match"],complete:"My parents didn’t watch the football match.",hint:"Use didn’t + base verb with action verbs."},
+{n:32,original:"I carried the boxes into the classroom.",prefix:"I",answers:["didn't carry the boxes into the classroom","did not carry the boxes into the classroom"],complete:"I didn’t carry the boxes into the classroom.",hint:"Do not keep the -ed ending after didn’t."},
+{n:33,original:"The café was open yesterday evening.",prefix:"The café",answers:["wasn't open yesterday evening","was not open yesterday evening"],complete:"The café wasn’t open yesterday evening.",hint:"Change was to wasn’t or was not."},
+{n:34,original:"The books were on the teacher’s desk.",prefix:"The books",answers:["weren't on the teacher's desk","were not on the teacher's desk"],complete:"The books weren’t on the teacher’s desk.",hint:"Change were to weren’t or were not."}
+];
+
+const ex5=[
+{n:35,prompt:"you / at home / last night",answers:["were you at home last night"],complete:"Were you at home last night?",aux:"Were",base:""},
+{n:36,prompt:"the children / happy / at the party",answers:["were the children happy at the party"],complete:"Were the children happy at the party?",aux:"Were",base:""},
+{n:37,prompt:"Emma / visit / her cousin / yesterday",answers:["did emma visit her cousin yesterday"],complete:"Did Emma visit her cousin yesterday?",aux:"Did",base:"visit"},
+{n:38,prompt:"your parents / watch / the school show",answers:["did your parents watch the school show"],complete:"Did your parents watch the school show?",aux:"Did",base:"watch"},
+{n:39,prompt:"the weather / cold / last weekend",answers:["was the weather cold last weekend"],complete:"Was the weather cold last weekend?",aux:"Was",base:""},
+{n:40,prompt:"Tom / clean / his bicycle / on Sunday",answers:["did tom clean his bicycle on sunday"],complete:"Did Tom clean his bicycle on Sunday?",aux:"Did",base:"clean"},
+{n:41,prompt:"the shops / busy / yesterday afternoon",answers:["were the shops busy yesterday afternoon"],complete:"Were the shops busy yesterday afternoon?",aux:"Were",base:""},
+{n:42,prompt:"your class / practise / English / last week",answers:["did your class practise english last week"],complete:"Did your class practise English last week?",aux:"Did",base:"practise"}
+];
+
+const ex6=[
+{n:43,q:"Was Anna at school yesterday?",visible:"Yes,",answers:["she was","yes she was"],complete:"Yes, she was.",hint:"Use was or wasn’t after a question beginning with Was."},
+{n:44,q:"Were your friends at the party?",visible:"No,",answers:["they weren't","they were not","no they weren't","no they were not"],complete:"No, they weren’t.",hint:"Use were or weren’t after a question beginning with Were."},
+{n:45,q:"Did Harry finish his project?",visible:"Yes,",answers:["he did","yes he did"],complete:"Yes, he did.",hint:"Use did or didn’t after a question beginning with Did."},
+{n:46,q:"Did the children play in the garden?",visible:"No,",answers:["they didn't","they did not","no they didn't","no they were not"],complete:"No, they didn’t.",hint:"Do not repeat the main action verb in a short answer."}
+];
+
+const ex7=[
+{n:47,sentence:"We was very tired after the school trip.",segments:["We","was","very tired after the school trip."],bad:1,answer:["were"],complete:"We were very tired after the school trip.",explain:"Use were with the subject we."},
+{n:48,sentence:"Lucy carryed her books into the classroom.",segments:["Lucy","carryed","her books into the classroom."],bad:1,answer:["carried"],complete:"Lucy carried her books into the classroom.",explain:"When a verb ends in consonant + y, change y to i and add -ed: carry → carried."},
+{n:49,sentence:"Did you watched the new film yesterday?",segments:["Did you","watched","the new film yesterday?"],bad:1,answer:["watch"],complete:"Did you watch the new film yesterday?",explain:"After did, use the base form: Did you watch…?"},
+{n:50,sentence:"The children didn’t played outside because it was rainy.",segments:["The children didn’t","played","outside because it was rainy."],bad:1,answer:["play"],complete:"The children didn’t play outside because it was rainy.",explain:"After didn’t, use the base form: didn’t play."}
+];
+
+const ALL_DATA={1:ex1,2:ex2,3:ex3,4:ex4,5:ex5,6:ex6,7:ex7};
+let state=null,currentExercise=1,currentPos=0,audioCtx=null;
+
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function todayISO(){const d=new Date();return d.toISOString().slice(0,10)}
+function newState(name="",cls="",date=todayISO()){
+  const orders={};for(let e=1;e<=7;e++)orders[e]=shuffle([...Array(EXERCISE_COUNTS[e]).keys()]);
+  return {name,cls,date,mute:false,orders,items:{},visitedExercises:{},choiceOrders:{},wasWereOrders:{},created:Date.now()}
+}
+function save(){try{localStorage.setItem("simplePastGame2026",JSON.stringify(state))}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem("simplePastGame2026"));if(s&&s.orders&&s.items)return s}catch(e){}return null}
+function closeModal(id){document.getElementById(id).classList.remove("show")}
+function showScreen(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active")}
+
+/* Audio synthesizer using Web Audio API */
+function playSound(type){
+  if(state&&state.mute)return;
+  try{
+    if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==='suspended')audioCtx.resume();
+    const osc=audioCtx.createOscillator();
+    const gain=audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    const now=audioCtx.currentTime;
+    
+    if(type==='correct'){
+      osc.type='triangle';
+      osc.frequency.setValueAtTime(523.25,now);
+      osc.frequency.setValueAtTime(659.25,now+0.1);
+      osc.frequency.setValueAtTime(783.99,now+0.2);
+      gain.gain.setValueAtTime(0.2,now);
+      gain.gain.exponentialRampToValueAtTime(0.01,now+0.4);
+      osc.start(now);osc.stop(now+0.4);
+    }else if(type==='wrong'){
+      osc.type='sawtooth';
+      osc.frequency.setValueAtTime(220,now);
+      osc.frequency.setValueAtTime(180,now+0.15);
+      gain.gain.setValueAtTime(0.25,now);
+      gain.gain.exponentialRampToValueAtTime(0.01,now+0.35);
+      osc.start(now);osc.stop(now+0.35);
+    }else if(type==='click'){
+      osc.type='sine';
+      osc.frequency.setValueAtTime(400,now);
+      gain.gain.setValueAtTime(0.1,now);
+      gain.gain.exponentialRampToValueAtTime(0.01,now+0.05);
+      osc.start(now);osc.stop(now+0.05);
+    }else if(type==='fanfare'){
+      osc.type='sine';
+      osc.frequency.setValueAtTime(523.25,now);
+      osc.frequency.setValueAtTime(659.25,now+0.15);
+      osc.frequency.setValueAtTime(783.99,now+0.3);
+      osc.frequency.setValueAtTime(1046.50,now+0.45);
+      gain.gain.setValueAtTime(0.2,now);
+      gain.gain.exponentialRampToValueAtTime(0.01,now+0.8);
+      osc.start(now);osc.stop(now+0.8);
+    }
+  }catch(e){}
+}
+
+function toggleMute(){
+  state.mute=!state.mute;
+  save();
+  const txt=state.mute?"🔇 MUTED":"🔊 SOUND";
+  document.getElementById("muteBtn").innerText=txt;
+  document.getElementById("muteBtn2").innerText=txt;
+}
+
+function cleanText(str){
+  return (str||"").toLowerCase()
+    .replace(/[’']/g,"'")
+    .replace(/[.,?!]/g,"")
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+window.onload=function(){
+  state=load();
+  if(!state)state=newState();
+  
+  document.getElementById("studentName").value=state.name||"";
+  document.getElementById("studentClass").value=state.cls||"";
+  document.getElementById("studentDate").value=state.date||todayISO();
+  
+  setTimeout(()=>{
+    showScreen("opening");
+  },1200);
+};
+
+function startGame(){
+  playSound('click');
+  const name=document.getElementById("studentName").value.trim();
+  const cls=document.getElementById("studentClass").value.trim();
+  const date=document.getElementById("studentDate").value||todayISO();
+  const fb=document.getElementById("openingFeedback");
+  
+  if(!name){
+    fb.className="feedback show try";
+    fb.innerText="Please enter your name before starting!";
+    return;
+  }
+  fb.className="feedback";
+  state.name=name;
+  state.cls=cls;
+  state.date=date;
+  save();
+  
+  updateMenuDashboard();
+  showScreen("menu");
+}
+
+function updateMenuDashboard(){
+  let score=0,completedEx=0,stars=0;
+  for(let i=1;i<=50;i++){
+    const item=state.items[i];
+    if(item){
+      score+=(item.score||0);
+      stars+=(item.stars||0);
+    }
+  }
+  
+  for(let e=1;e<=7;e++){
+    let exComplete=true;
+    for(let i=0;i<EXERCISE_COUNTS[e];i++){
+      const qIndex=GLOBAL_START[e]+i;
+      const it=state.items[qIndex];
+      if(!it || (it.status!=='correct' && it.status!=='wrong' && it.status!=='skipped')){
+        exComplete=false;break;
+      }
+    }
+    if(exComplete)completedEx++;
+  }
+
+  document.getElementById("menuScore").innerText=`${score} / 50`;
+  document.getElementById("menuCompleted").innerText=`${completedEx} / 7`;
+  document.getElementById("menuStars").innerText=`${stars} ⭐`;
+  document.getElementById("menuProgress").style.width=`${(score/50)*100}%`;
+
+  const grid=document.getElementById("menuGrid");
+  grid.innerHTML="";
+
+  for(let e=1;e<=7;e++){
+    let doneCount=0,exScore=0,exStars=0,hasSkipped=false;
+    for(let i=0;i<EXERCISE_COUNTS[e];i++){
+      const qIndex=GLOBAL_START[e]+i;
+      const it=state.items[qIndex];
+      if(it){
+        if(it.status==='correct'||it.status==='wrong'){
+          doneCount++;
+          exScore+=(it.score||0);
+          exStars+=(it.stars||0);
+        }else if(it.status==='skipped'){
+          hasSkipped=true;
+        }
+      }
+    }
+    
+    const isFinished=(doneCount===EXERCISE_COUNTS[e]);
+    const card=document.createElement("button");
+    card.className=`menu-card ${isFinished?'complete':(hasSkipped?'flagged':'')}`;
+    card.onclick=()=>openExercise(e);
+    
+    card.innerHTML=`
+      <div class="menu-num">${e}</div>
+      <div style="flex:1">
+        <div class="menu-title">${EXERCISE_ICONS[e-1]} ${EXERCISE_TITLES[e-1]}</div>
+        <div class="menu-meta">${EXERCISE_COUNTS[e]} Questions • Score: ${exScore}/${EXERCISE_COUNTS[e]} • Stars: ${exStars} ⭐</div>
+      </div>
+      <div class="menu-status">${isFinished?'✅':(hasSkipped?'🚩':'➔')}</div>
+    `;
+    grid.appendChild(card);
+  }
+
+  const resBtn=document.getElementById("resultsButton");
+  resBtn.disabled=(completedEx<7);
+}
+
+function goMenu(){
+  playSound('click');
+  updateMenuDashboard();
+  showScreen("menu");
+}
+
+function openExercise(exNum){
+  playSound('click');
+  currentExercise=exNum;
+  currentPos=0;
+  state.visitedExercises[exNum]=true;
+  save();
+  renderQuestion();
+  showScreen("exercise");
+}
+
+function renderQuestion(){
+  document.getElementById("studentLabel").innerText=`${state.name} (${state.cls||'Class'})`;
+  document.getElementById("exerciseTitle").innerText=`Ex ${currentExercise}: ${EXERCISE_TITLES[currentExercise-1]}`;
+  
+  const totalInEx=EXERCISE_COUNTS[currentExercise];
+  document.getElementById("exerciseCounter").innerText=`Question ${currentPos+1} of ${totalInEx}`;
+  document.getElementById("exerciseProgress").style.width=`${((currentPos+1)/totalInEx)*100}%`;
+
+  let currentExScore=0,currentExStars=0;
+  for(let i=0;i<totalInEx;i++){
+    const qIndex=GLOBAL_START[currentExercise]+i;
+    const it=state.items[qIndex];
+    if(it){
+      currentExScore+=(it.score||0);
+      currentExStars+=(it.stars||0);
+    }
+  }
+  document.getElementById("exerciseScore").innerText=currentExScore;
+  document.getElementById("exerciseStars").innerText=currentExStars;
+
+  const rawIdx=state.orders[currentExercise][currentPos];
+  const qData=ALL_DATA[currentExercise][rawIdx];
+  const qArea=document.getElementById("questionArea");
+  
+  const stored=state.items[qData.n]||{status:'unanswered',attempts:0};
+
+  if(currentExercise===1) renderEx1(qArea,qData,stored);
+  else if(currentExercise===2) renderEx2(qArea,qData,stored);
+  else if(currentExercise===3) renderEx3(qArea,qData,stored);
+  else if(currentExercise===4) renderEx4(qArea,qData,stored);
+  else if(currentExercise===5) renderEx5(qArea,qData,stored);
+  else if(currentExercise===6) renderEx6(qArea,qData,stored);
+  else if(currentExercise===7) renderEx7(qArea,qData,stored);
+}
+
+function renderEx1(container,q,stored){
+  if(!state.wasWereOrders[q.n]){
+    state.wasWereOrders[q.n]=Math.random()<0.5?["was","were"]:["were","was"];
+    save();
+  }
+  const opts=state.wasWereOrders[q.n];
+  const parts=q.q.split("__________");
+
+  let html=`
+    <div class="q-badge">⚖️ Exercise 1: Was or Were?</div>
+    <div class="q-text">${parts[0]} <span style="color:var(--blue);text-decoration:underline">&nbsp;&nbsp;&nbsp;&nbsp;</span> ${parts[1]}</div>
+    <div class="answer-grid">
+  `;
+  opts.forEach(opt=>{
+    let cls="answer-btn";
+    if(stored.status!=='unanswered'&&stored.userAnswer===opt){
+      cls+= (stored.userAnswer===q.a)?" correct":" wrong";
+    }
+    html+=`<button class="${cls}" onclick="checkEx1('${opt}', ${q.n})">${opt.toUpperCase()}</button>`;
+  });
+  html+=`</div><div id="fb${q.n}" class="feedback"></div>`;
+  container.innerHTML=html;
+
+  if(stored.status!=='unanswered'){
+    showStoredFeedback(q.n, stored.status==='correct', stored.status==='correct'?"Great job! Correct!":"Incorrect. The subject determines was or were.");
+  }
+}
+
+function checkEx1(ans, qNum){
+  const qData=ex1.find(x=>x.n===qNum);
+  const isCorrect=(ans===qData.a);
+  saveAnswerState(qNum, ans, isCorrect, 1);
+  renderQuestion();
+}
+
+function renderEx2(container,q,stored){
+  const parts=q.q.split("____________________");
+  const disabled=stored.status==='correct';
+
+  let html=`
+    <div class="q-badge">✏️ Exercise 2: Regular Verbs (-ed)</div>
+    <div class="q-text">${parts[0]} <span style="color:var(--blue);font-weight:1000">[ ${q.verb} ]</span> ${parts[1]}</div>
+    <div class="field">
+      <input id="in${q.n}" class="large-input ${stored.status==='retry'?'retry':''}" placeholder="Type the past simple verb..." value="${stored.userAnswer||''}" ${disabled?'disabled':''}>
+    </div>
+    <div class="action-row">
+      <button class="small-btn blue" onclick="checkEx2(${q.n})" ${disabled?'disabled':''}>CHECK ANSWER</button>
+      <button class="small-btn yellow" onclick="toggleHint('hint${q.n}')">💡 HINT</button>
+    </div>
+    <div id="hint${q.n}" class="hint-box">Spelling rule: ${q.hint}</div>
+    <div id="fb${q.n}" class="feedback"></div>
+  `;
+  container.innerHTML=html;
+
+  if(stored.status!=='unanswered'){
+    showStoredFeedback(q.n, stored.status==='correct', stored.status==='correct'?"Correct! Well spelled!":`Keep trying! Check the verb spelling.`);
+  }
+}
+
+function checkEx2(qNum){
+  const qData=ex2.find(x=>x.n===qNum);
+  const val=document.getElementById(`in${qNum}`).value;
+  const cVal=cleanText(val);
+  const isCorrect=qData.a.some(ans=>cleanText(ans)===cVal);
+
+  saveAnswerState(qNum, val, isCorrect, 2);
+  renderQuestion();
+}
+
+function renderEx3(container,q,stored){
+  if(!state.choiceOrders[q.n]){
+    state.choiceOrders[q.n]=shuffle(q.choices);
+    save();
+  }
+  const choices=state.choiceOrders[q.n];
+  const parts=q.q.split("__________");
+
+  let html=`
+    <div class="q-badge">🎯 Exercise 3: Multiple Choice</div>
+    <div class="q-text">${parts[0]} <span style="color:var(--blue);text-decoration:underline">&nbsp;&nbsp;&nbsp;&nbsp;</span> ${parts[1]}</div>
+    <div class="answer-grid">
+  `;
+  choices.forEach(ch=>{
+    let cls="answer-btn";
+    if(stored.status!=='unanswered'&&stored.userAnswer===ch){
+      cls+= (ch===q.a)?" correct":" wrong";
+    }
+    html+=`<button class="${cls}" onclick="checkEx3('${ch.replace(/'/g,"\\'")}', ${q.n})">${ch}</button>`;
+  });
+  html+=`</div>
+    <div id="hint${q.n}" class="hint-box">💡 Hint: ${q.hint}</div>
+    <div id="fb${q.n}" class="feedback"></div>
+  `;
+  container.innerHTML=html;
+
+  if(stored.status!=='unanswered'){
+    showStoredFeedback(q.n, stored.status==='correct', stored.status==='correct'?`Correct! ${q.explain}`:`Try again! ${q.hint}`);
+  }
+}
+
+function checkEx3(ans, qNum){
+  const qData=ex3.find(x=>x.n===qNum);
+  const isCorrect=(ans===qData.a);
+  saveAnswerState(qNum, ans, isCorrect, 3);
+  renderQuestion();
+}
+
+function renderEx4(container,q,stored){
+  const disabled=stored.status==='correct';
+
+  let html=`
+    <div class="q-badge">🚫 Exercise 4: Negative Sentences</div>
+    <p class="instruction">Make this sentence negative:</p>
+    <div class="q-text" style="color:var(--blue);">${q.original}</div>
+    <div class="prefix">${q.prefix} ...</div>
+    <input id="in${q.n}" class="large-input ${stored.status==='retry'?'retry':''}" placeholder="Complete the rest of the sentence..." value="${stored.userAnswer||''}" ${disabled?'disabled':''}>
+    <div class="action-row">
+      <button class="small-btn blue" onclick="checkEx4(${q.n})" ${disabled?'disabled':''}>CHECK ANSWER</button>
+      <button class="small-btn yellow" onclick="toggleHint('hint${q.n}')">💡 HINT</button>
+    </div>
+    <div id="hint${q.n}" class="hint-box">💡 ${q.hint}</div>
+    <div id="fb${q.n}" class="feedback"></div>
+  `;
+  container.innerHTML=html;
+
+  if(stored.status!=='unanswered'){
+    showStoredFeedback(q.n, stored.status==='correct', stored.status==='correct'?"Excellent negative construction!":`Not quite! Make sure to use didn't + base verb or wasn't/weren't.`);
+  }
+}
+
+function checkEx4(qNum){
+  const qData=ex4.find(x=>x.n===qNum);
+  const val=document.getElementById(`in${qNum}`).value;
+  const cVal=cleanText(val);
+  const isCorrect=qData.answers.some(ans=>cleanText(ans)===cVal);
+
+  saveAnswerState(qNum, val, isCorrect, 4);
+  renderQuestion();
+}
+
+function renderEx5(container,q,stored){
+  const disabled=stored.status==='correct';
+
+  let html=`
+    <div class="q-badge">❓ Exercise 5: Write Questions</div>
+    <p class="instruction">Build a past simple question using these prompts:</p>
+    <div class="q-text" style="color:var(--orange);">${q.prompt}</div>
+    <input id="in${q.n}" class="large-input ${stored.status==='retry'?'retry':''}" placeholder="Write the complete question here..." value="${stored.userAnswer||''}" ${disabled?'disabled':''}>
+    <div class="action-row">
+      <button class="small-btn blue" onclick="checkEx5(${q.n})" ${disabled?'disabled':''}>CHECK ANSWER</button>
+      <button class="small-btn yellow" onclick="toggleHint('hint${q.n}')">💡 HINT</button>
+    </div>
+    <div id="hint${q.n}" class="hint-box">💡 Start with <strong>${q.aux}</strong>${q.base?` and use the base verb <strong>${q.base}</strong>`:''}. Don't forget the question mark!</div>
+    <div id="fb${q.n}" class="feedback"></div>
+  `;
+  container.innerHTML=html;
+
+  if(stored.status!=='unanswered'){
+    showStoredFeedback(q.n, stored.status==='correct', stored.status==='correct'?"Great question formation!":`Remember: Was/Were or Did at the start of past questions!`);
+  }
+}
+
+function checkEx5(qNum){
+  const qData=ex5.find(x=>x.n===qNum);
+  const val=document.getElementById(`in${qNum}`).value;
+  const cVal=cleanText(val);
+  const isCorrect=qData.answers.some(ans=>cleanText(ans)===cVal);
+
+  saveAnswerState(qNum, val, isCorrect, 5);
+  renderQuestion();
+}
+
+function renderEx6(container,q,stored){
+  const disabled=stored.status==='correct';
+
+  let html=`
+    <div class="q-badge">💬 Exercise 6: Short Answers</div>
+    <div class="q-text">${q.q}</div>
+    <div class="phrase-line">
+      <span>${q.visible}</span>
+      <input id="in${q.n}" class="large-input ${stored.status==='retry'?'retry':''}" style="max-width:320px;display:inline-block;" placeholder="e.g. she was / they didn't" value="${stored.userAnswer||''}" ${disabled?'disabled':''}>
+    </div>
+    <div class="action-row">
+      <button class="small-btn blue" onclick="checkEx6(${q.n})" ${disabled?'disabled':''}>CHECK ANSWER</button>
+      <button class="small-btn yellow" onclick="toggleHint('hint${q.n}')">💡 HINT</button>
+    </div>
+    <div id="hint${q.n}" class="hint-box">💡 ${q.hint}</div>
+    <div id="fb${q.n}" class="feedback"></div>
+  `;
+  container.innerHTML=html;
+
+  if(stored.status!=='unanswered'){
+    showStoredFeedback(q.n, stored.status==='correct', stored.status==='correct'?"Spot-on short answer!":`Check subject pronoun and auxiliary verb matching.`);
+  }
+}
+
+function checkEx6(qNum){
+  const qData=ex6.find(x=>x.n===qNum);
+  const val=document.getElementById(`in${qNum}`).value;
+  const cVal=cleanText(val);
+  const isCorrect=qData.answers.some(ans=>cleanText(ans)===cVal);
+
+  saveAnswerState(qNum, val, isCorrect, 6);
+  renderQuestion();
+}
+
+function renderEx7(container,q,stored){
+  const disabled=stored.status==='correct';
+  const selectedSegment=stored.selectedSegment!==undefined?stored.selectedSegment:-1;
+
+  let html=`
+    <div class="q-badge">🔍 Exercise 7: Find and Correct</div>
+    <p class="instruction">1. Click on the incorrect word/phrase. 2. Type the correct word below.</p>
+    <div class="phrase-line">
+  `;
+
+  q.segments.forEach((seg,idx)=>{
+    let cls="phrase";
+    if(selectedSegment===idx) cls+=" selected";
+    if(stored.status!=='unanswered'){
+      if(idx===q.bad) cls+= (stored.status==='correct')?" fixed":" mistake";
+    }
+    html+=`<span class="${cls}" onclick="selectEx7Segment(${q.n}, ${idx})">${seg}</span>`;
+  });
+
+  html+=`</div>
+    <div class="field" style="margin-top:15px">
+      <label>Correction for selected word:</label>
+      <input id="in${q.n}" class="correction-input ${stored.status==='retry'?'retry':''}" placeholder="Type correct word..." value="${stored.userAnswer||''}" ${disabled?'disabled':''}>
+    </div>
+    <div class="action-row">
+      <button class="small-btn blue" onclick="checkEx7(${q.n})" ${disabled?'disabled':''}>CHECK CORRECTION</button>
+      <button class="small-btn yellow" onclick="toggleHint('hint${q.n}')">💡 HINT</button>
+    </div>
+    <div id="hint${q.n}" class="hint-box">💡 ${q.explain}</div>
+    <div id="fb${q.n}" class="feedback"></div>
+  `;
+  container.innerHTML=html;
+
+  if(stored.status!=='unanswered'){
+    showStoredFeedback(q.n, stored.status==='correct', stored.status==='correct'?`Correct! ${q.explain}`:`Find the incorrect past form and fix it!`);
+  }
+}
+
+function selectEx7Segment(qNum, segIdx){
+  playSound('click');
+  if(!state.items[qNum]) state.items[qNum]={status:'unanswered',attempts:0};
+  state.items[qNum].selectedSegment=segIdx;
+  save();
+  renderQuestion();
+}
+
+function checkEx7(qNum){
+  const qData=ex7.find(x=>x.n===qNum);
+  const st=state.items[qNum]||{};
+  const val=document.getElementById(`in${qNum}`).value;
+  const cVal=cleanText(val);
+  
+  const isSegmentRight=(st.selectedSegment===qData.bad);
+  const isWordRight=qData.answer.some(ans=>cleanText(ans)===cVal);
+  const isCorrect=isSegmentRight&&isWordRight;
+
+  saveAnswerState(qNum, val, isCorrect, 7);
+  renderQuestion();
+}
+
+function saveAnswerState(qNum, userAnswer, isCorrect, exNum){
+  const currentItem=state.items[qNum]||{attempts:0};
+  const attempts=(currentItem.attempts||0)+1;
+
+  if(isCorrect){
+    playSound('correct');
+    const score=1;
+    const stars= (attempts===1)?2:1;
+    state.items[qNum]={
+      status:'correct',
+      userAnswer,
+      score,
+      stars,
+      attempts,
+      flagged:false
+    };
+  }else{
+    playSound('wrong');
+    state.items[qNum]={
+      status:'retry',
+      userAnswer,
+      score:0,
+      stars:0,
+      attempts,
+      flagged:true
+    };
+  }
+  save();
+}
+
+function showStoredFeedback(qNum, isGood, text){
+  const fb=document.getElementById(`fb${qNum}`);
+  if(!fb)return;
+  fb.className=`feedback show ${isGood?'good':'try'}`;
+  fb.innerHTML=`${text} ${isGood?'<span class="star-burst">⭐</span>':''}`;
+}
+
+function toggleHint(id){
+  playSound('click');
+  const box=document.getElementById(id);
+  if(box) box.classList.toggle("show");
+}
+
+function skipCurrent(){
+  playSound('click');
+  const rawIdx=state.orders[currentExercise][currentPos];
+  const qData=ALL_DATA[currentExercise][rawIdx];
+  
+  state.items[qData.n]={
+    status:'skipped',
+    userAnswer:'',
+    score:0,
+    stars:0,
+    attempts:0,
+    flagged:true
+  };
+  save();
+  nextQuestion();
+}
+
+function previousQuestion(){
+  playSound('click');
+  if(currentPos>0){
+    currentPos--;
+    renderQuestion();
+  }
+}
+
+function nextQuestion(){
+  playSound('click');
+  const total=EXERCISE_COUNTS[currentExercise];
+  if(currentPos<total-1){
+    currentPos++;
+    renderQuestion();
+  }else{
+    showExerciseSummary();
+  }
+}
+
+function showExerciseSummary(){
+  playSound('fanfare');
+  let exScore=0,exStars=0,exCorrect=0;
+  const total=EXERCISE_COUNTS[currentExercise];
+
+  for(let i=0;i<total;i++){
+    const qIndex=GLOBAL_START[currentExercise]+i;
+    const it=state.items[qIndex];
+    if(it){
+      exScore+=(it.score||0);
+      exStars+=(it.stars||0);
+      if(it.status==='correct')exCorrect++;
+    }
+  }
+
+  document.getElementById("summaryTitle").innerText=`Exercise ${currentExercise}: ${EXERCISE_TITLES[currentExercise-1]}`;
+  document.getElementById("summaryStats").innerHTML=`
+    <div class="summary-item">Correct Answers: <strong>${exCorrect} / ${total}</strong></div>
+    <div class="summary-item">Exercise Score: <strong>${exScore} / ${total}</strong></div>
+    <div class="summary-item">Stars Earned: <strong>${exStars} ⭐</strong></div>
+    <div class="summary-item">Accuracy: <strong>${Math.round((exCorrect/total)*100)}%</strong></div>
+  `;
+  showScreen("exerciseSummary");
+}
+
+function reviewCurrentExercise(){
+  playSound('click');
+  const rArea=document.getElementById("reviewArea");
+  document.getElementById("reviewTitle").innerText=`Review Ex ${currentExercise}: ${EXERCISE_TITLES[currentExercise-1]}`;
+  
+  let html="";
+  for(let i=0;i<EXERCISE_COUNTS[currentExercise];i++){
+    const rawIdx=state.orders[currentExercise][i];
+    const q=ALL_DATA[currentExercise][rawIdx];
+    const st=state.items[q.n]||{status:'unanswered'};
+
+    html+=`
+      <div class="review-item">
+        <div style="font-weight:1000;color:var(--blue)">Q${i+1}: ${q.q||q.prompt||q.original||q.sentence}</div>
+        <div>Your answer: <strong>${st.userAnswer||'None'}</strong> (${st.status==='correct'?'✅ Correct':'❌ Needs practice'})</div>
+        ${q.complete?`<div style="color:var(--green-dark)">Correct full sentence: ${q.complete}</div>`:''}
+      </div>
+    `;
+  }
+  rArea.innerHTML=html;
+  showScreen("review");
+}
+
+function showResults(){
+  playSound('fanfare');
+  let totalScore=0,totalStars=0,totalCorrect=0,totalSkipped=0;
+  
+  for(let i=1;i<=50;i++){
+    const it=state.items[i];
+    if(it){
+      totalScore+=(it.score||0);
+      totalStars+=(it.stars||0);
+      if(it.status==='correct') totalCorrect++;
+      if(it.status==='skipped') totalSkipped++;
+    }
+  }
+
+  let completedEx=0;
+  for(let e=1;e<=7;e++){
+    let exDone=true;
+    for(let i=0;i<EXERCISE_COUNTS[e];i++){
+      const qIndex=GLOBAL_START[e]+i;
+      const it=state.items[qIndex];
+      if(!it||(it.status!=='correct'&&it.status!=='wrong'&&it.status!=='skipped')){exDone=false;break;}
+    }
+    if(exDone)completedEx++;
+  }
+
+  const percent=Math.round((totalScore/50)*100);
+  let ach="Grammar Explorer 🧭";
+  if(percent>=90) ach="Grammar Master 👑";
+  else if(percent>=75) ach="Past Tense Champion 🏆";
+  else if(percent>=50) ach="Past Tense Star ⭐";
+
+  document.getElementById("resultName").innerText=state.name;
+  document.getElementById("resultClass").innerText=state.cls||"N/A";
+  document.getElementById("resultDate").innerText=state.date;
+  document.getElementById("resultScore").innerText=`${totalScore} / 50`;
+  document.getElementById("resultPercent").innerText=`${percent}%`;
+  document.getElementById("resultCorrect").innerText=`${totalCorrect} / 50`;
+  document.getElementById("resultStars").innerText=`${totalStars} ⭐`;
+  document.getElementById("resultCompleted").innerText=`${completedEx} / 7`;
+  document.getElementById("resultSkipped").innerText=`${totalSkipped}`;
+  document.getElementById("resultAchievement").innerText=ach;
+  document.getElementById("resultRating").innerText=ach;
+
+  showScreen("results");
+}
+
+function showMistakeReview(){
+  playSound('click');
+  const rArea=document.getElementById("reviewArea");
+  document.getElementById("reviewTitle").innerText="Review Flagged Mistakes";
+
+  let html="", count=0;
+  for(let i=1;i<=50;i++){
+    const st=state.items[i];
+    if(st && (st.status==='retry'||st.status==='skipped'||st.flagged)){
+      count++;
+      let qData=null;
+      for(let e=1;e<=7;e++){
+        const found=ALL_DATA[e].find(x=>x.n===i);
+        if(found){qData=found;break;}
+      }
+      if(qData){
+        html+=`
+          <div class="review-item">
+            <div style="font-weight:1000;color:var(--orange)">Question ${i}: ${qData.q||qData.prompt||qData.original||qData.sentence}</div>
+            <div>Your answer: <strong>${st.userAnswer||'Skipped'}</strong></div>
+            ${qData.complete?`<div style="color:var(--green-dark)">Correct form: ${qData.complete}</div>`:''}
+          </div>
+        `;
+      }
+    }
+  }
+
+  if(count===0){
+    html="<div class='review-item' style='background:#f4fff6;border-color:#8dd5a1'>🎉 Excellent! You have no incorrect or flagged questions!</div>";
+  }
+
+  rArea.innerHTML=html;
+  showScreen("review");
+}
+
+function completeSkipped(){
+  playSound('click');
+  for(let e=1;e<=7;e++){
+    for(let i=0;i<EXERCISE_COUNTS[e];i++){
+      const qIndex=GLOBAL_START[e]+i;
+      const it=state.items[qIndex];
+      if(it && it.status==='skipped'){
+        currentExercise=e;
+        currentPos=i;
+        showScreen("exercise");
+        renderQuestion();
+        return;
+      }
+    }
+  }
+  alert("No skipped questions found!");
+}
+
+function resetGame(){
+  if(confirm("Are you sure you want to reset all progress?")){
+    playSound('click');
+    state=newState(state.name, state.cls, state.date);
+    save();
+    updateMenuDashboard();
+    showScreen("opening");
+  }
+}
+
+function openTeacherLogin(){
+  playSound('click');
+  document.getElementById("teacherCode").value="";
+  document.getElementById("teacherLoginFeedback").className="feedback";
+  document.getElementById("teacherLoginModal").classList.add("show");
+}
+
+function verifyTeacherCode(){
+  const code=document.getElementById("teacherCode").value.trim();
+  const fb=document.getElementById("teacherLoginFeedback");
+  if(code==="1234"||code==="0000"){
+    closeModal("teacherLoginModal");
+    openTeacherDashboard();
+  }else{
+    fb.className="feedback show try";
+    fb.innerText="Incorrect code. Try '1234'.";
+  }
+}
+
+function openTeacherDashboard(){
+  playSound('click');
+  let totalScore=0,totalStars=0,totalAnswered=0;
+  for(let i=1;i<=50;i++){
+    const it=state.items[i];
+    if(it){
+      totalScore+=(it.score||0);
+      totalStars+=(it.stars||0);
+      if(it.status==='correct'||it.status==='retry'||it.status==='wrong') totalAnswered++;
+    }
+  }
+
+  document.getElementById("teacherSummary").innerHTML=`
+    <div class="teacher-stat">Student: <strong>${state.name||'N/A'} (${state.cls||'Class'})</strong></div>
+    <div class="teacher-stat">Total Score: <strong>${totalScore} / 50</strong></div>
+    <div class="teacher-stat">Stars Collected: <strong>${totalStars} ⭐</strong></div>
+  `;
+
+  teacherShowAllAnswers();
+  document.getElementById("teacherModal").classList.add("show");
+}
+
+function teacherShowAllAnswers(){
+  const content=document.getElementById("teacherContent");
+  let html=`
+    <h4>All Questions & Answer Key</h4>
+    <div class="table-scroll">
+    <table class="teacher-table">
+      <thead>
+        <tr><th>Ex</th><th>Q#</th><th>Question Prompt</th><th>Correct Answer Key</th></tr>
+      </thead>
+      <tbody>
+  `;
+
+  for(let e=1;e<=7;e++){
+    ALL_DATA[e].forEach(q=>{
+      let key="";
+      if(q.a) key=Array.isArray(q.a)?q.a.join(" / "):q.a;
+      else if(q.answers) key=q.answers.join(" / ");
+      else if(q.complete) key=q.complete;
+
+      html+=`
+        <tr>
+          <td>Ex ${e}</td>
+          <td>Q${q.n}</td>
+          <td>${q.q||q.prompt||q.original||q.sentence}</td>
+          <td><strong>${key}</strong></td>
+        </tr>
+      `;
+    });
+  }
+
+  html+=`</tbody></table></div>`;
+  content.innerHTML=html;
+}
+
+function teacherReviewAnswers(){
+  const content=document.getElementById("teacherContent");
+  let html=`
+    <h4>Student Submission Log</h4>
+    <div class="table-scroll">
+    <table class="teacher-table">
+      <thead>
+        <tr><th>Q#</th><th>Student Answer</th><th>Status</th><th>Score</th><th>Attempts</th></tr>
+      </thead>
+      <tbody>
+  `;
+
+  for(let i=1;i<=50;i++){
+    const st=state.items[i]||{status:'unanswered',userAnswer:'-',score:0,attempts:0};
+    html+=`
+      <tr>
+        <td>Q${i}</td>
+        <td>${st.userAnswer||'-'}</td>
+        <td>${st.status}</td>
+        <td>${st.score||0}</td>
+        <td>${st.attempts||0}</td>
+      </tr>
+    `;
+  }
+
+  html+=`</tbody></table></div>`;
+  content.innerHTML=html;
+}
+
+function teacherReset(){
+  if(confirm("Teacher Reset: Clear all student responses?")){
+    playSound('click');
+    state=newState(state.name, state.cls, state.date);
+    save();
+    closeModal("teacherModal");
+    updateMenuDashboard();
+    showScreen("opening");
+  }
+}
+</script>
+</body>
+</html>
